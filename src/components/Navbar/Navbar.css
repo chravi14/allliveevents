@@ -1,0 +1,23 @@
+.navbar.bg-dark {
+    background-color: #101522 !important;
+}
+
+.navbar-expand-lg .navbar-nav a.nav-link {
+    margin-right:1rem;
+}
+
+a.active {
+    border-bottom: 2px solid #fff;
+}
+
+.btn.btn-login {
+    color:#fff;
+    text-decoration: none;
+    border: 1px solid #fff;
+}
+
+.btn.btn-login:hover {
+    color: #101522;
+    background: #fff;
+}
+

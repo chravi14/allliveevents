@@ -1,0 +1,21 @@
+.home {
+    margin-top: 2rem;
+    line-height: 1.2rem;
+}
+
+.main-header {
+    font-size: 3rem;
+    margin: 0;
+    padding:0;
+    margin-bottom: 1.5rem;
+}
+
+.intro {
+    width: 65%;
+}
+
+@media screen and (max-width: 768px) {
+    .intro {
+        width: 100%;
+    }
+}
