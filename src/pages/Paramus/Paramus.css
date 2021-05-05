@@ -1,0 +1,21 @@
+.sports {
+    margin-top: 2rem;
+    line-height: 1.2rem;
+}
+
+.players {
+    width: 100%;
+    margin: 0 auto;
+}
+
+.court-details {
+    position: absolute;
+    top:0;
+    left:20px;
+    color: #fff;
+}
+
+.field {
+    margin-top: 2rem;
+    margin-right: 5rem;
+}

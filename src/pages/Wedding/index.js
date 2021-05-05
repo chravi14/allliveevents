@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Wedding.css';
 import axios from 'axios';
 import WeddingPoster from './../../assets/Wedding_All.png';
@@ -57,7 +57,7 @@ const Wedding = () => {
         <div className="wedding">
             <h1 className="main-header">Wedding Events</h1>
             <div id="weddingPlayer"></div>
-            {showWeddingImage ? (<div id="weddingPoster"><img src={WeddingPoster} width="500px" alt="wedding image" /></div>) : null}
+            {showWeddingImage ? (<div id="weddingPoster"><img src={WeddingPoster} width="500px" alt="weddingImage" /></div>) : null}
         </div>
     )
 }

@@ -1,0 +1,12 @@
+.admin-login {
+    width: 75%;
+    margin:0 auto;
+    max-width: 960px;
+    padding: 3rem;
+}
+
+.admin-title {
+    font-size: 3rem;
+    text-align: center;
+    margin-bottom: 2rem;
+}

@@ -4,60 +4,62 @@ import axios from 'axios';
 import { getChannelIDs, channelCourtMap } from './../../shared/data';
 
 const Sports = () => {
-
+    const [isDisabled, setIsDisabled] = useState(true);
     useEffect(() => {
-        getChannelIDs().then(data => {
-            const channels = data;
-            console.log(channels);
-            channels.forEach((channel, index) => {
-                const elementName = channelCourtMap[index + 1];
-                console.log(elementName);
-                const url = `https://api.jwplayer.com/v2/sites/3TrTO9d1/channels/${channel.id}/events/`;
-                const options = {
-                    method: 'GET',
-                    qs: { page: '1', page_length: '10' },
-                    headers: {
-                        Accept: 'application/json',
-                        Authorization: 'Add AUTH KEY here'
-                    }
-                };
+        if (!isDisabled) {
+            getChannelIDs().then(data => {
+                const channels = data;
+                console.log(channels);
+                channels.forEach((channel, index) => {
+                    const elementName = channelCourtMap[index + 1];
+                    console.log(elementName);
+                    const url = `https://api.jwplayer.com/v2/sites/3TrTO9d1/channels/${channel.id}/events/`;
+                    const options = {
+                        method: 'GET',
+                        qs: { page: '1', page_length: '10' },
+                        headers: {
+                            Accept: 'application/json',
+                            Authorization: 'Add AUTH KEY here'
+                        }
+                    };
 
-                axios.get(url, options).then(res => {
-                    console.log(res)
-                    const events = res.data.events;
-                    const mediaId = events.length > 0 ? events[0]['media_id'] : null;
-                    const streamCompleted = events.length > 0 && events[0]['status'] === 'completed' ? true : false;
-                    console.log("Video Id is ", mediaId);
-                    if (mediaId && !streamCompleted) {
-                        const mediaUrl = `https://api.jwplayer.com/v2/sites/3TrTO9d1/media/${mediaId}`;
-                        axios.get(mediaUrl, options).then(res => {
-                            console.log(res);
+                    axios.get(url, options).then(res => {
+                        console.log(res)
+                        const events = res.data.events;
+                        const mediaId = events.length > 0 ? events[0]['media_id'] : null;
+                        const streamCompleted = events.length > 0 && events[0]['status'] === 'completed' ? true : false;
+                        console.log("Video Id is ", mediaId);
+                        if (mediaId && !streamCompleted) {
+                            const mediaUrl = `https://api.jwplayer.com/v2/sites/3TrTO9d1/media/${mediaId}`;
+                            axios.get(mediaUrl, options).then(res => {
+                                console.log(res);
+                                window.jwplayer(elementName).setup({
+                                    "playlist": [{
+                                        "file": res.data.source_url
+                                    }],
+                                    "height": 360,
+                                    "width": 540,
+                                });
+                            }).catch(err => {
+                                console.log(err)
+                            })
+                        } else {
                             window.jwplayer(elementName).setup({
-                                "playlist": [{
-                                    "file": res.data.source_url
-                                }],
+                                "playlist": "https://cdn.jwplayer.com/v2/playlists/w6kHyfZa",
                                 "height": 360,
-                                "width": 540,
+                                "width": 500,
+                                "repeat": true,
                             });
-                        }).catch(err => {
-                            console.log(err)
-                        })
-                    } else {
-                        window.jwplayer(elementName).setup({
-                            "playlist": "https://cdn.jwplayer.com/v2/playlists/w6kHyfZa",
-                            "height": 360,
-                            "width": 500,
-                            "repeat": true,
-                        });
-                    }
+                        }
 
-                }).catch(err => {
-                    console.log(err)
+                    }).catch(err => {
+                        console.log(err)
+                    })
                 })
-            })
-        }).catch(err => {
-            console.log(err)
-        });
+            }).catch(err => {
+                console.log(err)
+            });
+        }
     }, [])
     const videoPlayers = (
         <div className="players">
@@ -88,8 +90,8 @@ const Sports = () => {
     );
     return (
         <div className="sports">
-            <h1 className="main-header">Sports Events</h1>
-            {videoPlayers}
+            <h1 className="main-header">Tournaments</h1>
+            {isDisabled ? "There are no events happening right now." : videoPlayers}
         </div>
     )
 }
