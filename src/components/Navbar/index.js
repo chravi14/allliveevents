@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useRef } from 'react';
 import './Navbar.css';
 import logo from './../../assets/logo.png';
 import { NavLink, Link } from 'react-router-dom';
@@ -7,6 +7,7 @@ import { useAuth } from './../../context/AuthContext';
 
 const Navbar = () => {
     const { currentUser, signout } = useAuth();
+    const loginBtn = useRef();
     const history = useHistory();
     console.log(currentUser);
     const handleSignout = () => {
@@ -14,6 +15,17 @@ const Navbar = () => {
             history.push("/admin");
         })
     }
+
+    const showPayWall = (event) => {
+        event.preventDefault();
+        console.log(event.target);
+        if (loginBtn.current.innerText === "Join Now / Login") {
+            loginBtn.current.click();
+        } else {
+            history.push("/tournaments");
+        };
+    }
+
     return (
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
             <Link to="/" className="navbar-brand">
@@ -30,7 +42,10 @@ const Navbar = () => {
                         <NavLink className="nav-link" to="/home">Home</NavLink>
                     </li>
                     <li className="nav-item">
-                        <NavLink to="/tournaments" className="nav-link">Tournaments</NavLink>
+                        <NavLink to="/tournaments" onClick={showPayWall} className="nav-link">Tournaments</NavLink>
+                    </li>
+                    <li className="nav-item">
+                        <NavLink to="/events" className="nav-link">Events</NavLink>
                     </li>
                     <li className="nav-item">
                         <NavLink to="/paramus" className="nav-link">Paramus</NavLink>
@@ -45,9 +60,9 @@ const Navbar = () => {
                         <li className="nav-item">
                             <NavLink to="/logout" className="nav-link" onClick={handleSignout}>Logout</NavLink>
                         </li></>)}
-                    {!currentUser && (<li className="nav-item">
-                        <a class="btn btn-login" href="https://aaliveevents.memberspace.com/member/sign_in">Join Now / Login</a>
-                    </li>)}
+                    <li className="nav-item">
+                        <a className="btn btn-danger" ref={loginBtn} id="memberspace-login" href="https://aaliveevents.memberspace.com/member/sign_in">Join Now / Login</a>
+                    </li>
                 </ul>
             </div>
         </nav>

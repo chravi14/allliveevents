@@ -1,5 +1,5 @@
 .home {
-    margin-top: 2rem;
+    margin-top: 1rem;
     line-height: 1.2rem;
 }
 
@@ -7,12 +7,40 @@
     font-size: 3rem;
     margin: 0;
     padding:0;
-    margin-bottom: 1.5rem;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.img-fluid {
+    width: 100%;
+    /* width: 50%; */
+}
+
+.home-intro {
+    width:100%;
 }
 
 .intro {
     width: 65%;
+    margin-left: 40px;
 }
+
+.carousel-control-next {
+    right: -60px !important;
+}
+
+.carousel-control-prev {
+    left: -60px !important;
+}
+
+p a.btn-login {
+    color: crimson;
+}
+
+.empty {
+    text-align: center;
+}
+
 
 @media screen and (max-width: 768px) {
     .intro {

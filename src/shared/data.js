@@ -68,6 +68,26 @@ export const getChannelIDs = () => {
 
 }
 
+export const getChannelsByCategory = (category) => {
+    const url = 'https://api.jwplayer.com/v2/sites/3TrTO9d1/channels/';
+    console.log(category);
+    const options = {
+        method: 'GET',
+        qs: { page: '1', page_length: '10' },
+        headers: {
+            Accept: 'application/json',
+            Authorization: 'dQ-pCdfniYN89LsihnFD_WInTWpCVE56bFFSVEptZGtnd1dWVnZSbEZxVTB4Tk9WQlMn'
+        }
+    };
+    return axios.get(url, options).then(response => {
+        const channelsData = response.data.channels;
+        return channelsData.filter(channel => {
+            return channel['metadata']['custom_params'] && channel['metadata']['custom_params']['category'] === category && channel['status'] !== 'idle';
+        });
+    });
+}
+
+
 export const getWeddingChannelId = () => {
     return "m9jrfF7Q";
 }

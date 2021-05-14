@@ -1,12 +1,14 @@
-import './App.css';
-import Navbar from './components/Navbar';
 import { Redirect, Route, Switch } from 'react-router-dom';
+
 import Home from './pages/Home';
-import Sports from './pages/Sports';
-import Paramus from './pages/Paramus';
-import Wedding from './pages/Wedding';
+import Paramus from './pages/Paramus/Paramus';
 import Admin from './pages/Admin';
 import Dashboard from './pages/Admin/Dashboard';
+import Events from './pages/Events/Events';
+import Tournaments from './pages/Tournaments/Tournaments';
+import Navbar from './components/Navbar';
+import './App.css';
+
 import { AuthProvider } from './context/AuthContext';
 
 function App() {
@@ -17,8 +19,9 @@ function App() {
         <div className="container">
           <Switch>
             <Route path="/home" exact><Home /></Route>
-            <Route path="/tournaments" exact><Sports /></Route>
+            <Route path="/tournaments" exact><Tournaments /></Route>
             <Route path="/paramus" exact><Paramus /></Route>
+            <Route path="/events" exact><Events /></Route>
             <Route path="/admin" exact><Admin /></Route>
             <Route path="/dashboard" exact><Dashboard /></Route>
             <Redirect path="/" to="/home"></Redirect>

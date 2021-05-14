@@ -1,14 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import './Paramus.css';
+import React, { useEffect } from 'react';
+import './Players.css';
 import axios from 'axios';
-import { getParamusChannelIDs, channelCourtMap } from './../../shared/data';
 
-const Paramus = () => {
-    const [courts, setCourts] = useState(getParamusChannelIDs);
-    console.log(courts);
+const Players = ({ channels, pageTitle }) => {
+
     useEffect(() => {
-        courts.forEach((channel, index) => {
-            const elementName = channel.elementName;
+        channels.forEach((channel, index) => {
+            console.log(channel, "Herererererer");
+            const elementName = channel.id;
             console.log(elementName);
             const url = `https://api.jwplayer.com/v2/sites/3TrTO9d1/channels/${channel.id}/events/`;
             const options = {
@@ -54,27 +53,21 @@ const Paramus = () => {
             })
         })
     }, [])
-    const videoPlayers = (
-        <div className="players">
-            <p className="intro">Please click on any of the courts to start watching the event.</p>
-            <div className="row">
-                {courts.map((court, index) => {
-                    return (<div className="col-md-5 field">
-                        <div id={court.elementName} ></div>
-                        <div className="court-details">
-                            <h3 className="name">{court.name}</h3>
-                        </div>
-                    </div>)
-                })}
-            </div>
-        </div>
-    );
+
+
     return (
-        <div className="sports">
-            <h1 className="main-header">Paramus High School</h1>
-            {videoPlayers}
+        <div className="row">
+            {/* <p className="intro">Please click on any of the courts to start watching the event.</p> */}
+            {channels.map((channel, index) => {
+                return (<div key={index} className="col-md-5 field">
+                    <div id={channel.id}></div>
+                    <div className="court-details">
+                        <h3 className="name">{channel.metadata.title}</h3>
+                    </div>
+                </div>)
+            })}
         </div>
     )
 }
 
-export default Paramus;
+export default Players;

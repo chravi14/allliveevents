@@ -9,17 +9,45 @@ import 'react-toastify/dist/ReactToastify.css';
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import './Dashboard.css';
 import LoaderUI from '../../../components/UI/Loader';
+import RecordedEvents from '../../../components/RecordedEvents/RecordedEvents';
+
+const CATEGORIES = [
+    {
+        id: 1,
+        name: "Tournaments"
+    },
+    {
+        id: 2,
+        name: "Events"
+    },
+    {
+        id: 3,
+        name: "Paramus"
+    }
+]
 
 
 const Dashboard = () => {
     const { currentUser } = useAuth();
     const [showModal, setShowModal] = useState(false);
     const [channelName, setChannelName] = useState("");
+    const [channelCategory, setChannelCategory] = useState("");
     const [channels, setChannels] = useState([]);
     const [showLoader, setShowLoader] = useState(false);
+    const [events, setEvents] = useState([]);
+    const [showRecordedEvents, setShowRecordedEvents] = useState(false);
+    const [showChannels, setShowChannels] = useState(true);
+    const NUMBER_OF_ITEMS_PER_PAGE = 10;
+
     const onChangeChannelName = (event) => {
         setChannelName(event.target.value);
     }
+
+    const onChangeCategory = (event) => {
+        console.log(event.target.value)
+        setChannelCategory(event.target.value);
+    }
+
     const handleClose = () => setShowModal(false);
     const handleShow = () => {
         setShowModal(true);
@@ -30,6 +58,7 @@ const Dashboard = () => {
         // getAllChannels();
         setShowLoader(true);
         getUserChannels();
+        // getAllEvents();
     }, [])
 
 
@@ -75,9 +104,13 @@ const Dashboard = () => {
             }
         };
         axios.get(url, options).then(res => {
+            let userEvents = [];
             const allChannels = res.data.channels;
             const userChannels = allChannels.filter(c => c['metadata']['custom_params'] && c['metadata']['custom_params']['created_by'] === currentUser.uid);
+            userChannels.forEach(c => userEvents.push(...c['recent_events']));
+            const completeduserEvents = userEvents.filter(ue => ue['status'] === 'completed');
             setChannels(userChannels);
+            setEvents(completeduserEvents);
             setShowLoader(false);
         }).catch(err => {
             console.log(err);
@@ -87,11 +120,14 @@ const Dashboard = () => {
 
     const saveChannel = () => {
         setShowLoader(true);
+        const categorySelected = CATEGORIES.find(cat => cat.id === +channelCategory);
+        console.log(categorySelected);
         const data = {
             "metadata": {
                 "title": channelName,
                 "custom_params": {
-                    "created_by": currentUser.uid
+                    "created_by": currentUser.uid,
+                    "category": categorySelected.name
                 }
             }
         }
@@ -140,8 +176,18 @@ const Dashboard = () => {
         })
     }
 
+    const handleRecordedEvents = () => {
+        setShowChannels(false);
+        setShowRecordedEvents(true);
+    }
+
+    const handleShowChannels = () => {
+        setShowChannels(true);
+        setShowRecordedEvents(false);
+    }
+
     const channelsData = channels.map(channel => {
-        return (<div className="row info-values">
+        return (<div key={channel.id} className="row info-values">
             <div className="col-md-2">
                 {channel.id}
             </div>
@@ -152,7 +198,7 @@ const Dashboard = () => {
                 <div className="row">
                     <span className="url col-md-5">rtmps://global-live.mux.com/app</span>
                     <span className="key col-md-6">{channel.stream_key}</span>
-                    <span className="col-md-1"><i class="far fa-trash-alt" onClick={() => deleteChannelHandler(channel.id)}></i></span>
+                    <span className="col-md-1"><i className="far fa-trash-alt" onClick={() => deleteChannelHandler(channel.id)}></i></span>
                 </div>
             </div>
 
@@ -162,78 +208,65 @@ const Dashboard = () => {
         <div className="admin-dashboard">
             <div className="header">
                 <h1 className="section-title">Dashboard</h1>
-                <button className="btn btn-dark" onClick={handleShow}>Create Channel</button>
-            </div>
-            <ToastContainer transition={Slide} />
-            <div className="main-section">
-                <div className="live-channels">
-                    <h5 className="subsection-title">Live Channels</h5>
-                    {showLoader ?
-                        (<LoaderUI showLoader={showLoader} />) :
-                        channels.length === 0 ? <div className="empty-msg">There are no live channels created.Please click on create channel button to start.</div> : (<div className="live-channels-info">
-                            <div className="row info-header">
-                                <div className="col-md-2">
-                                    Channel Id
-                            </div>
-                                <div className="col-md-2">
-                                    Channel Name
-                            </div>
-                                <div className="col-md-8">
-                                    Stream Info
-                            </div>
-                            </div>
-                            {channelsData}
-                        </div>)
-                    }
-
-
+                <div className="btn-container">
+                    <button className="btn btn-info mr-5" onClick={handleShowChannels}>My Channels</button>
+                    <button className="btn btn-warning mr-5" onClick={handleRecordedEvents}>Recorded Events</button>
                 </div>
-                {/* <div className="usage">
-                    <h5 className="subsection-title">Usage</h5>
-                    <div className="usage-info row">
-                        <div className="storage col-md-3">
-                            <div className="row">
-                                <div className="col-md-12 label">Storage</div>
-                            </div>
-                            <div className="row">
-                                <div className="col-md-12 value">217GB</div>
-                            </div>
-                        </div>
-                        <div className="storage col-md-3">
-                            <div className="row">
-                                <div className="col-md-12 label">Streaming Data</div>
-                            </div>
-                            <div className="row">
-                                <div className="col-md-12 value">14.6GB</div>
-                            </div>
-                        </div>
-                        <div className="storage col-md-3">
-                            <div className="row">
-                                <div className="col-md-12 label">Playbacks</div>
-                            </div>
-                            <div className="row">
-                                <div className="col-md-12 value">4000</div>
-                            </div>
-                        </div>
-                    </div>
-                </div> */}
             </div>
-            <Modal show={showModal} onHide={handleClose} centered>
-                <Modal.Header closeButton>
-                    <Modal.Title>Create Channel</Modal.Title>
-                </Modal.Header>
+            {showChannels ?
+                (<>
+                    <div className="main-section">
+                        <div className="live-channels">
+                            <div className="channel-header">
+                                <h5 className="subsection-title">Live Channels</h5>
+                                <button className="btn btn-dark" onClick={handleShow}>Create Channel</button>
+                            </div>
 
-                <Modal.Body>
-                    <div className="form-group">
-                        <input type="text" className="form-control" onChange={onChangeChannelName} name="channelName" value={channelName} id="channelName" placeholder="Enter channel Name" />
+                            {showLoader ?
+                                (<LoaderUI showLoader={showLoader} />) :
+                                channels.length === 0 ? <div className="empty-msg">There are no live channels created.Please click on create channel button to start.</div> : (<div className="live-channels-info">
+                                    <div className="row info-header">
+                                        <div className="col-md-2">
+                                            Channel Id
+                                        </div>
+                                        <div className="col-md-2">
+                                            Channel Name
+                                        </div>
+                                        <div className="col-md-8">
+                                            Stream Info
+                                        </div>
+                                    </div>
+                                    {channelsData}
+                                </div>)
+                            }
+                        </div>
                     </div>
-                </Modal.Body>
+                    <Modal show={showModal} onHide={handleClose} centered>
+                        <Modal.Header closeButton>
+                            <Modal.Title>Create Channel</Modal.Title>
+                        </Modal.Header>
 
-                <Modal.Footer>
-                    <Button variant="danger" onClick={handleClose}>Close</Button>
-                    <Button variant="dark" onClick={saveChannel}>Create</Button>
-                </Modal.Footer>
-            </Modal>
+                        <Modal.Body>
+                            <div className="form-group">
+                                <input type="text" className="form-control" onChange={onChangeChannelName} name="channelName" value={channelName} id="channelName" placeholder="Enter channel Name" />
+                            </div>
+                            <div className="form-group">
+                                <select className="custom-select" id="category" onChange={onChangeCategory}>
+                                    <option selected>Please select Category</option>
+                                    {CATEGORIES.map(cat => <option key={cat.id} value={cat.id}>{cat.name}</option>)}
+                                </select>
+                            </div>
+                        </Modal.Body>
+
+                        <Modal.Footer>
+                            <Button variant="danger" onClick={handleClose}>Close</Button>
+                            <Button variant="dark" onClick={saveChannel}>Create</Button>
+                        </Modal.Footer>
+                    </Modal>
+                </>) : null}
+            {showRecordedEvents ? (<><RecordedEvents recordedEvents={events} /></>) : null}
+            <ToastContainer transition={Slide} />
+
         </div>
     )
 }
