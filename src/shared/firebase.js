@@ -1,4 +1,4 @@
-import firebase from 'firebase';
+import firebase from "firebase";
 
 // const firebaseConfig = {
 //     apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -10,16 +10,17 @@ import firebase from 'firebase';
 //     // measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
 // };
 
-
 const firebaseConfig = {
-    apiKey: "AIzaSyC8vWdR_4Q6c3fzsVxTs2nWm67IKkJkZlU",
-    authDomain: "all-abilities-live.firebaseapp.com",
-    projectId: "all-abilities-live",
-    storageBucket: "all-abilities-live.appspot.com",
-    messagingSenderId: "945392424670",
-    appId: "1:945392424670:web:e27cf79f142bbcf363144f"
-}
+  apiKey: "AIzaSyC8vWdR_4Q6c3fzsVxTs2nWm67IKkJkZlU",
+  authDomain: "all-abilities-live.firebaseapp.com",
+  projectId: "all-abilities-live",
+  storageBucket: "all-abilities-live.appspot.com",
+  messagingSenderId: "945392424670",
+  appId: "1:945392424670:web:e27cf79f142bbcf363144f",
+};
 
 const myApp = firebase.initializeApp(firebaseConfig);
+
+export const database = firebase.database();
 
 export const auth = myApp.auth();

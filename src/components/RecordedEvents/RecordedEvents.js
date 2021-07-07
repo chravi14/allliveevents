@@ -9,11 +9,18 @@ const RecordedEvents = (props) => {
                 "playlist": `https://cdn.jwplayer.com/v2/media/${re.media_id}`,
                 "height": "100%",
                 "width": "100%",
+                "displaytitle": true,
             });
 
             const buttonId = 'download-video-button';
             const iconPath = 'https://www.jwplayer.com/developers/web-player-demos/add-download-button/assets/download.svg';
             const tooltipText = 'Download Video';
+            var downloadUrl = "";
+            playerInstance.on('playlistItem', function (e) {
+
+                downloadUrl = e.item.allSources[5].file
+                console.log("This is the download URL", downloadUrl)
+            })
 
             // Call the player's `addButton` API method to add the custom button
             playerInstance.addButton(iconPath, tooltipText, buttonClickAction, buttonId);
@@ -21,12 +28,12 @@ const RecordedEvents = (props) => {
             // This function is executed when the button is clicked
             function buttonClickAction() {
                 const playlistItem = playerInstance.getPlaylistItem();
-
+                console.log(playlistItem)
                 // Create an anchor element
                 const anchor = document.createElement('a');
 
                 // Set the anchor's `href` attribute to the media's file URL
-                const fileUrl = playlistItem.file;
+                const fileUrl = downloadUrl;
                 anchor.setAttribute('href', fileUrl);
 
                 // set the anchor's `download` attribute to the media's file name
@@ -50,11 +57,8 @@ const RecordedEvents = (props) => {
 
     const mediaPlayer = props.recordedEvents.map(re => {
         return (<div key={re.media_id} className="col-md-4 mt-4">
-            <div className="card" style={{ width: "22rem" }}>
+            <div className="card">
                 <div id={re.media_id}></div>
-                <div className="card-body">
-                    <h5 className="card-title"></h5>
-                </div>
             </div>
         </div>)
     });
