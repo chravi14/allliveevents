@@ -271,14 +271,19 @@ const Dashboard = () => {
       .then((res) => {
         const categoryChannels = res.data;
         console.log(categoryChannels);
-        let channelToDeleteKey = null;
-        Object.keys(categoryChannels).forEach((key) => {
-          if (categoryChannels[key].id === channel.id) {
-            channelToDeleteKey = key;
+
+        if (categoryChannels) {
+          let channelToDeleteKey = null;
+          Object.keys(categoryChannels).forEach((key) => {
+            if (categoryChannels[key].id === channel.id) {
+              channelToDeleteKey = key;
+            }
+          });
+          console.log(channelToDeleteKey);
+          if (channelToDeleteKey) {
+            execDeleteQuery(category.toLowerCase(), channelToDeleteKey);
           }
-        });
-        console.log(channelToDeleteKey);
-        execDeleteQuery(category.toLowerCase(), channelToDeleteKey);
+        }
       });
   };
 
