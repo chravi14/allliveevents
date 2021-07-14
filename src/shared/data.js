@@ -67,36 +67,30 @@ export const getChannelIDs = () => {
   });
 };
 
-export const getChannelsByCategory = (category) => {
+export const getChannelsByCategory = async (category) => {
   const url = `https://all-abilities-live-default-rtdb.firebaseio.com/channels/${category}.json`;
   const options = {
     method: "GET",
   };
-  return axios.get(url, options).then((response) => {
-    console.log(response.data);
-    let channels = [];
-    let activeChannels = [];
-    if (response.data) {
-      Object.keys(response.data).forEach((key) => {
-        channels.push(response.data[key]);
-      });
-      console.log(channels);
-      channels.forEach((channel) => {
-        isChannelLive(channel.id).then((res) => {
-          if (res) {
-            activeChannels.push(channel);
-          }
-          console.log(activeChannels);
-        });
-        return activeChannels;
-      });
+  let channels = [];
+  let activeChannels = [];
+  const response = await axios.get(url, options);
+  if (response.data) {
+    Object.keys(response.data).forEach((key) => {
+      channels.push(response.data[key]);
+    });
+  }
+  console.log("start");
+  for (let index = 0; index < channels.length; index++) {
+    const channelId = channels[index].id;
+    const isLive = await isChannelLive(channelId);
+    console.log(isLive, "is live value");
+    if (isLive) {
+      activeChannels.push(channels[index]);
     }
-
-    // const channelsData = response.data.channels;
-    // return channelsData.filter(channel => {
-    //     return channel['metadata']['custom_params'] && channel['metadata']['custom_params']['category'] === category && channel['status'] !== 'idle';
-    // });
-  });
+  }
+  console.log("end");
+  return activeChannels;
 };
 
 const isChannelLive = async (channelId) => {

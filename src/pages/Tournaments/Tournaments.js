@@ -10,16 +10,17 @@ const Tournaments = () => {
   useEffect(() => {
     setShowLoader(true);
     getChannelsByCategory("tournaments").then((res) => {
-      if (res) {
-        setEventChannels(res);
-      }
       setShowLoader(false);
-      window.jwplayer("trailer").setup({
-        playlist: "https://cdn.jwplayer.com/v2/playlists/w6kHyfZa",
-        height: 360,
-        width: 750,
-        repeat: true,
-      });
+      if (res.length > 0) {
+        setEventChannels(res);
+      } else {
+        window.jwplayer("trailer").setup({
+          playlist: "https://cdn.jwplayer.com/v2/playlists/w6kHyfZa",
+          height: 360,
+          width: 750,
+          repeat: true,
+        });
+      }
     });
   }, []);
 
