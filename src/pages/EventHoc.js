@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
-import Players from "../../components/Players/Players";
-import { getChannelsByCategory } from "../../shared/data";
-import Loader from "../../components/UI/Loader";
+import Players from "./../components/Players/Players";
+import { getChannelsByCategory } from "./../shared/data";
+import Loader from "./../components/UI/Loader";
 
-const Paramus = () => {
+const EventHoc = ({ title, category }) => {
   const [showLoader, setShowLoader] = useState(false);
   const [eventChannels, setEventChannels] = useState([]);
 
   useEffect(() => {
     setShowLoader(true);
-    getChannelsByCategory("paramus").then((res) => {
+    getChannelsByCategory(category).then((res) => {
       setShowLoader(false);
       if (res.length > 0) {
         setEventChannels(res);
@@ -29,10 +29,10 @@ const Paramus = () => {
   ) : (
     <>
       <div className="sports">
-        <h1 className="main-header">School Events</h1>
+        <h1 className="main-header">{title}</h1>
       </div>
       {eventChannels.length > 0 ? (
-        <Players channels={eventChannels} />
+        <Players channels={eventChannels} pageTitle="Events" />
       ) : (
         <div className="empty">
           There are no events happening under this category.
@@ -47,4 +47,4 @@ const Paramus = () => {
   );
 };
 
-export default Paramus;
+export default EventHoc;

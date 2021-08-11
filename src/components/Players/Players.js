@@ -48,6 +48,15 @@ const Players = ({ channels, pageTitle }) => {
           } else {
             window.jwplayer(elementName).setup({
               playlist: "https://cdn.jwplayer.com/v2/playlists/w6kHyfZa",
+              advertising: {
+                client: "vast",
+                adscheduleid: "Az87bY12",
+                schedule: [
+                  {
+                    tag: "https://www.domain.com/adtag.xml",
+                  },
+                ],
+              },
               height: 360,
               width: 500,
               repeat: true,

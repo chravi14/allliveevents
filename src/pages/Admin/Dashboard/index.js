@@ -22,7 +22,11 @@ const CATEGORIES = [
   },
   {
     id: 3,
-    name: "Paramus",
+    name: "Schools",
+  },
+  {
+    id: 4,
+    name: "Meetings",
   },
 ];
 
