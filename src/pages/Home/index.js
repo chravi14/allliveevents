@@ -1,32 +1,104 @@
-import React, { useEffect, useState } from 'react';
-import LandingCarousel from '../../components/LandingCarousel/LandingCarousel';
-import './Home.css';
+import React, { useRef, useState, useEffect } from "react";
+import "./Home.css";
+import introVideo from "./../../assets/video.mp4";
+import logo from "./../../assets/logo.png";
+import Speaker from "./../../assets/speaker.png";
+import Pause from "./../../assets/pause.png";
+import Mute from "./../../assets/mute.png";
+import Play from "./../../assets/play.png";
 
+const Introduction = () => {
+  const loginBtn = useRef();
+  const videoRef = useRef();
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [playOrPauseSrc, setPlayOrPause] = useState(Pause);
+  const [speakerSrc, setSpeakerSrc] = useState(Speaker);
+  const [isMuted, setIsMuted] = useState(true);
 
-const Home = () => {
-    const [showLoginMsg, setShowLoginMsg] = useState(true);
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.play();
+    }
+  }, [videoRef]);
 
-    useEffect(() => {
-        if (document.getElementById("memberspace-login").innerText === 'Join Now / Login') {
-            setShowLoginMsg(true);
-        } else {
-            setShowLoginMsg(false);
-        }
-    })
+  const togglePlay = () => {
+    if (isPlaying) {
+      videoRef.current.pause();
+      setPlayOrPause(
+        "https://cdn3.iconfinder.com/data/icons/complete-set-icons/512/video512x512.png"
+      );
+    } else {
+      videoRef.current.play();
+      setPlayOrPause(Pause);
+    }
+    setIsPlaying(!isPlaying);
+  };
 
-    return (
-        <div className="home">
-            <h1 className="main-header">Welcome to All Abilities Live</h1>
-            <LandingCarousel />
-            <div className="home-intro mt-5">
-                <p>We provide you an opportunity to watch all the live events online.</p>
-                {showLoginMsg && <p style={{ color: "red" }}>Please click <a className="btn btn-danger" href="https://members.aaliveevents.com/member/sign_in">Join Now / Login</a> to create an account and purchase a daily pass of $10 to access the Tournaments page.</p>}
+  const toggleMute = () => {
+    if (isMuted) {
+      videoRef.current.muted = false;
+      setSpeakerSrc(Speaker);
+    } else {
+      videoRef.current.muted = true;
+      setSpeakerSrc(Mute);
+    }
+    setIsMuted(!isMuted);
+  };
 
-                <p>Access our Events and Paramus pages for free via our top navigation. </p>
-                <p>Please excuse our new look as our site has entered training camp mode (under construction) and will return soon with new and improved features.</p>
-            </div>
+  return (
+    <div className="introContainer" id="home">
+      <div className="introBg">
+        <video
+          type="video/mp4"
+          src={introVideo}
+          autoPlay={isPlaying}
+          ref={videoRef}
+          className="introVideo"
+        />
+      </div>
+      <div className="introContent">
+        <h1 className="introH1">Welcome to</h1>
+        <img src={logo} alt="AAL Logo" />
+        <p className="introP">
+          We provide you an opportunity to watch all the live events online.
+        </p>
+      </div>
+      <div className="btnContent">
+        <a
+          className="btn btn-danger"
+          ref={loginBtn}
+          id="memberspace-login"
+          href="https://members.aaliveevents.com/member/sign_in"
+        >
+          Join Now / Login
+        </a>
+        <p className="btnText">
+          To access the Tournaments page, create an account or login and
+          purchase a $10 daily pass.
+        </p>
+      </div>
+      <div className="controls">
+        <div className="pause">
+          <img
+            src={playOrPauseSrc}
+            alt="Play or Pause"
+            onClick={togglePlay}
+            width="42px"
+            height="42px"
+          />
         </div>
-    )
-}
+        <div className="volume">
+          <img
+            src={speakerSrc}
+            alt="Mute or Unmute"
+            onClick={toggleMute}
+            width="40px"
+            height="40px"
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
 
-export default Home;
+export default Introduction;

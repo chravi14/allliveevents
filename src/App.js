@@ -17,7 +17,7 @@ function App() {
     <AuthProvider>
       <div className="main-container">
         <Navbar />
-        <div className="container">
+        <div className="container-fluid">
           <Switch>
             <Route path="/home" exact>
               <Home />
