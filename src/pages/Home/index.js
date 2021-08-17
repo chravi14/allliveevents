@@ -6,20 +6,15 @@ import Speaker from "./../../assets/speaker.png";
 import Pause from "./../../assets/pause.png";
 import Mute from "./../../assets/mute.png";
 import Play from "./../../assets/play.png";
+import VideoPlayer from "react-video-js-player";
 
 const Introduction = () => {
-  const loginBtn = useRef();
-  const videoRef = useRef();
+  const loginBtn = React.createRef();
+  const videoRef = React.createRef();
   const [isPlaying, setIsPlaying] = useState(true);
   const [playOrPauseSrc, setPlayOrPause] = useState(Pause);
-  const [speakerSrc, setSpeakerSrc] = useState(Speaker);
+  const [speakerSrc, setSpeakerSrc] = useState(Mute);
   const [isMuted, setIsMuted] = useState(true);
-
-  useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.play();
-    }
-  }, [videoRef]);
 
   const togglePlay = () => {
     if (isPlaying) {
@@ -46,13 +41,15 @@ const Introduction = () => {
   };
 
   return (
-    <div className="introContainer" id="home">
+    <>
       <div className="introBg">
         <video
           type="video/mp4"
+          preload="metadata"
           src={introVideo}
-          autoPlay={isPlaying}
           ref={videoRef}
+          autoPlay
+          muted
           className="introVideo"
         />
       </div>
@@ -97,7 +94,7 @@ const Introduction = () => {
           />
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

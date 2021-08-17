@@ -1,13 +1,13 @@
 .introContainer {
-  display: "flex";
-  background: "#0c0c0c";
-  justify-content: "center";
-  align-items: "center";
-  width: "100%";
-  height: "100vh";
-  padding: "0 2rem";
-  position: "relative";
-  z-index: "1";
+  display: flex;
+  background: #0c0c0c;
+  justify-content: center;
+  align-items: center;
+  /* width: 100%; */
+  height: 100vh;
+  /* padding: 0 2rem; */
+  position: relative;
+  z-index: 1;
 }
 
 .introBg {
@@ -110,6 +110,7 @@
   position: absolute;
   right: 20px;
   top: 70px;
+  z-index: 100;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
@@ -137,5 +138,17 @@
   }
   .introP {
     font-size: 16px;
+  }
+
+  .introContent {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .introContent img {
+    width: 100%;
+  }
+  .container-fluid {
+    padding: 0 !important;
   }
 }
