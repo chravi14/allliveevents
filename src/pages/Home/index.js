@@ -1,12 +1,9 @@
 import React, { useRef, useState, useEffect } from "react";
 import "./Home.css";
-import introVideo from "./../../assets/video.mp4";
 import logo from "./../../assets/logo.png";
 import Speaker from "./../../assets/speaker.png";
 import Pause from "./../../assets/pause.png";
 import Mute from "./../../assets/mute.png";
-import Play from "./../../assets/play.png";
-import VideoPlayer from "react-video-js-player";
 
 const Introduction = () => {
   const loginBtn = React.createRef();
@@ -15,6 +12,7 @@ const Introduction = () => {
   const [playOrPauseSrc, setPlayOrPause] = useState(Pause);
   const [speakerSrc, setSpeakerSrc] = useState(Mute);
   const [isMuted, setIsMuted] = useState(true);
+  const videoSrc = "https://aaliveevents.s3.amazonaws.com/video.mp4";
 
   const togglePlay = () => {
     if (isPlaying) {
@@ -46,7 +44,7 @@ const Introduction = () => {
         <video
           type="video/mp4"
           preload="metadata"
-          src={introVideo}
+          src={videoSrc}
           ref={videoRef}
           autoPlay
           muted
