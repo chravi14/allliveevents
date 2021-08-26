@@ -16,8 +16,6 @@ const EventHoc = ({ title, category }) => {
       } else {
         window.jwplayer("trailer").setup({
           playlist: "https://cdn.jwplayer.com/v2/playlists/w6kHyfZa",
-          height: 360,
-          width: 750,
           repeat: true,
         });
       }
@@ -36,8 +34,8 @@ const EventHoc = ({ title, category }) => {
       ) : (
         <div className="empty">
           There are no events happening under this category.
-          <div className="row">
-            <div className="col-md-6 offset-md-2">
+          <div className="row justify-content-center">
+            <div className="col-md-6">
               <div id="trailer" className="m-auto"></div>
             </div>
           </div>

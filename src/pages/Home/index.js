@@ -71,7 +71,7 @@ const Introduction = () => {
         </a>
         <p className="btnText">
           To access the Tournaments page, create an account or login and
-          purchase a $10 daily pass.
+          purchase your pass.
         </p>
       </div>
       <div className="controls">
