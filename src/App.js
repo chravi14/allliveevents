@@ -22,8 +22,8 @@ function App() {
             <Route path="/home" exact>
               <Home />
             </Route>
-            <Route path="/tournaments">
-              <EventHoc title="Tournaments" category="tournaments" />
+            <Route path="/premium-content">
+              <EventHoc title="Premium Content" category="tournaments" />
             </Route>
             <Route path="/meetings">
               <EventHoc title="Meetings" category="meetings" />

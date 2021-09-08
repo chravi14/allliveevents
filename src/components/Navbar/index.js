@@ -23,7 +23,7 @@ const Navbar = () => {
     if (loginBtn.current.innerText === "Join Now / Login") {
       loginBtn.current.click();
     } else {
-      history.push("/tournaments");
+      history.push("/premium-content");
     }
   };
 
@@ -53,11 +53,11 @@ const Navbar = () => {
           </li>
           <li className="nav-item">
             <NavLink
-              to="/tournaments"
+              to="/premium-content"
               onClick={showPayWall}
               className="nav-link"
             >
-              Tournaments
+              Premium Content
             </NavLink>
           </li>
           <li className="nav-item">
