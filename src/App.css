@@ -9,6 +9,10 @@
   padding-top: 60px;
 }
 
+ms-widget-css-seed ms-button.MemberSpaceWidgetInternal__Button_root {
+  display: none;
+}
+
 #__memberspace_memberlogin_button {
   display: none;
 }
@@ -17,4 +21,8 @@
   height: 360px;
   width: 750px;
   margin: 0 auto;
+}
+
+.pagination .page-item.disabled .page-link {
+  display: none;
 }

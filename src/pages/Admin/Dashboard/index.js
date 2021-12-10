@@ -37,10 +37,13 @@ const Dashboard = () => {
   const [channelCategory, setChannelCategory] = useState("");
   const [channels, setChannels] = useState([]);
   const [showLoader, setShowLoader] = useState(false);
+  const [pageNum, setPageNum] = useState(1);
+  const [totalMediaCount, setTotalMediaCount] = useState(0);
+  const pageLength = 50;
   const [events, setEvents] = useState([]);
   const [showRecordedEvents, setShowRecordedEvents] = useState(false);
   const [showChannels, setShowChannels] = useState(true);
-  const NUMBER_OF_ITEMS_PER_PAGE = 10;
+  const NUMBER_OF_ITEMS_PER_PAGE = 50;
 
   const onChangeChannelName = (event) => {
     setChannelName(event.target.value);
@@ -75,6 +78,36 @@ const Dashboard = () => {
         toast.info(message, position);
         break;
     }
+  };
+
+  const getRecordedMedia = (pageNum) => {
+    const options = {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        Authorization:
+          "dQ-pCdfniYN89LsihnFD_WInTWpCVE56bFFSVEptZGtnd1dWVnZSbEZxVTB4Tk9WQlMn",
+      },
+    };
+
+    const url = `https://api.jwplayer.com/v2/sites/3TrTO9d1/media/?page=${pageNum}&page_length=${NUMBER_OF_ITEMS_PER_PAGE}&sort=created%3Adsc`;
+
+    axios
+      .get(url, options)
+      .then((res) => {
+        setTotalMediaCount(res.data.total);
+        const allMedia = res.data.media;
+        const userMedia = allMedia.filter(
+          (media) =>
+            media["metadata"]["custom_params"]["created_by"] === currentUser.uid
+        );
+
+        setEvents(userMedia);
+        setPageNum(pageNum);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const getAllChannels = () => {
@@ -118,11 +151,11 @@ const Dashboard = () => {
             c["metadata"]["custom_params"]["created_by"] === currentUser.uid
         );
         userChannels.forEach((c) => userEvents.push(...c["recent_events"]));
-        const completeduserEvents = userEvents.filter(
-          (ue) => ue["status"] === "completed"
-        );
+        // const completeduserEvents = userEvents.filter(
+        //   (ue) => ue["status"] === "completed"
+        // );
         setChannels(userChannels);
-        setEvents(completeduserEvents);
+        // setEvents(completeduserEvents);
         setShowLoader(false);
       })
       .catch((err) => {
@@ -244,6 +277,8 @@ const Dashboard = () => {
   const handleRecordedEvents = () => {
     setShowChannels(false);
     setShowRecordedEvents(true);
+    setPageNum(1);
+    getRecordedMedia(1);
   };
 
   const handleShowChannels = () => {
@@ -425,7 +460,12 @@ const Dashboard = () => {
       ) : null}
       {showRecordedEvents ? (
         <>
-          <RecordedEvents recordedEvents={events} />
+          <RecordedEvents
+            recordedEvents={events}
+            count={totalMediaCount}
+            currentPage={pageNum}
+            paginationClick={(pageSelected) => getRecordedMedia(pageSelected)}
+          />
         </>
       ) : null}
       <ToastContainer transition={Slide} />

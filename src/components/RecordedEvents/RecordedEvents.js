@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
+import { Pagination } from "react-bootstrap";
 import Download from "./../../assets/download_icon.png";
 
 const RecordedEvents = (props) => {
   console.log(props.recordedEvents);
   useEffect(() => {
-    props.recordedEvents.map((re) => {
-      const elementName = re.media_id;
+    props.recordedEvents.map((media) => {
+      const elementName = media.id;
       const playerInstance = window.jwplayer(elementName).setup({
-        playlist: `https://cdn.jwplayer.com/v2/media/${re.media_id}`,
+        playlist: `https://cdn.jwplayer.com/v2/media/${media.id}`,
         height: "100%",
         width: "100%",
         displaytitle: true,
@@ -58,21 +59,90 @@ const RecordedEvents = (props) => {
         document.body.removeChild(anchor);
       }
     });
-  }, []);
+  }, [props.recordedEvents]);
 
-  const mediaPlayer = props.recordedEvents.map((re) => {
+  const pageNumbers = new Array(Math.floor(props.count / 50)).fill(0);
+  console.log(pageNumbers);
+
+  const goToNextPage = () => {
+    if (props.currentPage < pageNumbers.length) {
+      props.paginationClick(props.currentPage + 1);
+    }
+  };
+  const goToPrevPage = () => {
+    if (props.currentPage > 1) {
+      props.paginationClick(props.currentPage - 1);
+    }
+  };
+  console.log(props.count);
+
+  const mediaPlayer = props.recordedEvents.map((media) => {
     return (
-      <div key={re.media_id} className="col-md-4 mt-4">
+      <div key={media.id} className="col-md-4 mt-4">
         <div className="card">
-          <div id={re.media_id}></div>
+          <div id={media.id}></div>
         </div>
       </div>
+    );
+  });
+
+  const pageClickHandler = (event, pageNum) => {
+    event.preventDefault();
+    props.paginationClick(pageNum);
+  };
+
+  const paginationSection = pageNumbers.map((pageNumber, index) => {
+    let pageActiveClassName =
+      index + 1 === props.currentPage ? "page-item active" : "page-item";
+    return (
+      <li className={pageActiveClassName}>
+        <a
+          className="page-link"
+          href="#"
+          onClick={(event) => pageClickHandler(event, index + 1)}
+        >
+          {index + 1}
+        </a>
+      </li>
     );
   });
 
   return (
     <div className="events-container">
       <h5 className="mt-2">Recorded Events</h5>
+      {/* <nav aria-label="Page navigation example"> */}
+      <ul className="pagination justify-content-center">
+        <li
+          className={`page-item${props.currentPage === 1 ? " disabled" : ""}`}
+        >
+          <a
+            className="page-link"
+            href="#"
+            aria-label="Previous"
+            onClick={() => goToPrevPage()}
+          >
+            <span aria-hidden="true">&laquo;</span>
+            <span className="sr-only">Previous</span>
+          </a>
+        </li>
+        {paginationSection}
+        <li
+          className={`page-item${
+            props.currentPage === pageNumbers.length ? " disabled" : ""
+          }`}
+        >
+          <a
+            className="page-link"
+            href="#"
+            aria-label="Next"
+            onClick={() => goToNextPage()}
+          >
+            <span aria-hidden="true">&raquo;</span>
+            <span className="sr-only">Next</span>
+          </a>
+        </li>
+      </ul>
+      {/* </nav> */}
       <div className="row">{mediaPlayer}</div>
     </div>
   );
