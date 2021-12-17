@@ -68,7 +68,7 @@ const Introduction = () => {
           Join Now / Login
         </a>
         <p className="btnText">
-          To access the Tournaments page, create an account or login and
+          To access the Premium content page, create an account or login and
           purchase your pass.
         </p>
       </div>

@@ -9,13 +9,13 @@
   padding-top: 60px;
 }
 
-ms-widget-css-seed ms-button.MemberSpaceWidgetInternal__Button_root {
+ms-widget-css-seed > ms-button.MemberSpaceWidgetInternal__Button_root {
   display: none;
 }
-
+/*
 #__memberspace_memberlogin_button {
   display: none;
-}
+} */
 
 #trailer {
   height: 360px;
