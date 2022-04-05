@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { Pagination } from "react-bootstrap";
+import React, { useEffect } from "react";
 import Download from "./../../assets/download_icon.png";
 
 const RecordedEvents = (props) => {
@@ -8,7 +7,7 @@ const RecordedEvents = (props) => {
     props.recordedEvents.map((media) => {
       const elementName = media.id;
       const playerInstance = window.jwplayer(elementName).setup({
-        playlist: `https://cdn.jwplayer.com/v2/media/${media.id}`,
+        playlist: `https://cdn.jwplayer.com/v2/media/${media.id}?max_resolution=1920`,
         height: "100%",
         width: "100%",
         displaytitle: true,
@@ -19,7 +18,10 @@ const RecordedEvents = (props) => {
       const tooltipText = "Download Video";
       var downloadUrl = "";
       playerInstance.on("playlistItem", function (e) {
-        downloadUrl = e.item.allSources[5].file;
+        console.log(e.item);
+        downloadUrl = e.item.allSources.find(
+          (source) => source.type === "mp4" && source.height === 720
+        )?.file;
         console.log("This is the download URL", downloadUrl);
       });
 
@@ -40,23 +42,28 @@ const RecordedEvents = (props) => {
 
         // Set the anchor's `href` attribute to the media's file URL
         const fileUrl = downloadUrl;
-        anchor.setAttribute("href", fileUrl);
+        if (fileUrl) {
+          anchor.setAttribute("href", fileUrl);
+          anchor.setAttribute("target", "_blank");
 
-        // set the anchor's `download` attribute to the media's file name
-        const downloadName = playlistItem.file.split("/").pop();
-        anchor.setAttribute("download", downloadName);
+          // set the anchor's `download` attribute to the media's file name
+          const downloadName = playlistItem.file.split("/").pop();
+          anchor.setAttribute("download", downloadName);
 
-        // Set the anchor's style to hide it when it's added to the page
-        anchor.style.display = "none";
+          // Set the anchor's style to hide it when it's added to the page
+          anchor.style.display = "none";
 
-        // Add the anchor to the page
-        document.body.appendChild(anchor);
+          // Add the anchor to the page
+          document.body.appendChild(anchor);
 
-        // Trigger a click event to activate the anchor
-        anchor.click();
+          // Trigger a click event to activate the anchor
+          anchor.click();
 
-        // Remove the anchor from the page, it's not needed anymore
-        document.body.removeChild(anchor);
+          // Remove the anchor from the page, it's not needed anymore
+          document.body.removeChild(anchor);
+        } else {
+          alert("There is no file for this media item.");
+        }
       }
     });
   }, [props.recordedEvents]);
