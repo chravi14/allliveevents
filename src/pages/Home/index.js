@@ -12,7 +12,7 @@ const Introduction = () => {
   const [playOrPauseSrc, setPlayOrPause] = useState(Pause);
   const [speakerSrc, setSpeakerSrc] = useState(Mute);
   const [isMuted, setIsMuted] = useState(true);
-  const videoSrc = "https://aaliveevents.s3.amazonaws.com/video.mp4";
+  const videoSrc = "https://aaliveevents.s3.amazonaws.com/video1.mov";
 
   const togglePlay = () => {
     if (isPlaying) {
